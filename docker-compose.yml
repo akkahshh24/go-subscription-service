@@ -1,26 +1,30 @@
 version: '3'
 
-services: 
+services:
+
+  #  start Postgres, and ensure that data is stored to a mounted volume
   postgres:
     image: 'postgres:14.2'
     ports:
       - "5432:5432"
     restart: always
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: user
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: concurrency
     volumes:
-      - ./concurrency-db-data/postgres/:/var/lib/postgresql/data
+      - ./db-data/postgres/:/var/lib/postgresql/data/
 
+  #  start Redis, and ensure that data is stored to a mounted volume
   redis:
     image: 'redis:alpine'
-    ports: 
+    ports:
       - "6380:6379"
     restart: always
     volumes:
-      - ./concurrency-db-data/redis/:/data
+      - ./db-data/redis/:/data
 
+  #  start mailhog
   mailhog:
     image: 'mailhog/mailhog:latest'
     ports:
